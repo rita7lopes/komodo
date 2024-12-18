@@ -1,7 +1,13 @@
 # Build Core
 FROM rust:1.82.0-bullseye AS core-builder
 WORKDIR /builder
-COPY . .
+COPY Cargo.toml Cargo.lock ./
+COPY ./lib ./lib
+COPY ./client/core/rs ./client/core/rs
+COPY ./client/periphery ./client/periphery
+COPY ./bin/core ./bin/core
+
+# Compile app
 RUN cargo build -p komodo_core --release
 
 # Build Frontend
@@ -43,4 +49,4 @@ LABEL org.opencontainers.image.source=https://github.com/mbecker20/komodo
 LABEL org.opencontainers.image.description="Komodo Core"
 LABEL org.opencontainers.image.licenses=GPL-3.0
 
-ENTRYPOINT [ "/app/core" ]
+ENTRYPOINT [ "core" ]
